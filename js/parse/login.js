@@ -10,7 +10,7 @@ $(document).ready(
 								Parse.User.logIn($("#inputUsername").val(), $("#inputPassword").val(), { //$("#inputUsername").val(), $("#inputPassword").val()
 									success: function(user) {
 										//if login success, then redirect page to index.html
-										window.location.replace("../docs/index.html");
+										window.location.replace("../public/index.html");
 
 									},
 									error: function(user, error) {
@@ -29,7 +29,7 @@ $(document).ready(
 							}
 						);
 
-						$("#login").submit(
+						$("#loginFacebook").click(
 							function facebookLogin(){
 								Parse.FacebookUtils.logIn(null, {
 								  success: function(user) {
@@ -39,7 +39,7 @@ $(document).ready(
 
 								    } else {
 								      //alert("User logged in through Facebook!");
-								      window.location.replace("../docs/index.html");
+								      window.location.replace("../public/index.html");
 
 								    }
 								  },
