@@ -20,7 +20,7 @@ $(document).ready(
 
 										//Login Failed - display error right now for debugging purposes
 										$("#error").empty();
-										$("#error").append("<div class='alert alert-error'> Oh snap! The username and password did not match! Try again!</div>");
+										$("#error").append("<div class='nNote nFailure'> Oh snap! The username and password did not match! Try again!</div>");
 
 									}
 								}	
@@ -45,7 +45,7 @@ $(document).ready(
 								  },
 								  error: function(user, error) {
 										$("#errorFacebook").empty();
-										$("#errorFacebook").append("<div class='alert alert-error'> Oh snap! The user cancelled the Facebook login or did not fully authorize! Try again!</div>");
+										$("#errorFacebook").append("<div class='nNote nFailure'> Oh snap! The user cancelled the Facebook login or did not fully authorize! Try again!</div>");
 								    //alert("User cancelled the Facebook login or did not fully authorize.");
 								  }
 								});

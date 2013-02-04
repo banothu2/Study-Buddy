@@ -8,7 +8,18 @@ $(document).ready(
 					var User = Parse.Object.extend("User");
 
 					var facebookUserId = Parse.User.current().get("authData");
+					var universityKey = Parse.User.current().relation("Universities").parent.get("universityId").id;
+					var Universities = Parse.Object.extend("Universities");
+					var query = new Parse.Query(Universities);
 
+					query.get(universityKey, {
+						success: function(results){
+							var universityFullName = results.get("university");
+							var universityShortName = results.get("universityKey");
+						$("#UniversityFullNameDash").append(universityFullName);
+						$("#UniversityShortFormDash").append(universityShortName);
+						}
+					});
 
 					$.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id+"?fields=first_name", function(response) {
 					    var firstName = response["first_name"];
