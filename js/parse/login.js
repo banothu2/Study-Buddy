@@ -35,7 +35,7 @@ $(document).ready(
 								  success: function(user) {
 								    if (!user.existed()) {
 								      //alert("User signed up and logged in through Facebook!");
-								      window.location.replace("../auth/facebookLogin.html");
+								      window.location.replace("../auth/newUser.html");
 
 								    } else {
 								      //alert("User logged in through Facebook!");
