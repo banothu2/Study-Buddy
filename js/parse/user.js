@@ -24,12 +24,6 @@ $(document).ready(
 				$("#CurrentDate").append("" + month[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear());
 			}
 
-
-
-
-
-
-
 					var User = Parse.Object.extend("User");
 
 					var facebookUserId = Parse.User.current().get("authData");
@@ -45,6 +39,48 @@ $(document).ready(
 						$("#UniversityShortFormDash").append(universityShortName);
 						}
 					});
+
+
+
+
+            		      // Parse Data 
+      var Map = Parse.Object.extend("Map");
+      var query = new Parse.Query(Map);
+      var d = new Date();
+      var dateCheck = d.getTime() - 1728000000000;
+
+  query.equalTo("universityId", Parse.User.current().relation("Universities").parent.get("universityId"));
+
+  query.find({
+
+    success: function(results){
+
+          for (var i = 0; i < results.length; i++) {
+
+
+            var contact = results[i].get("contact") || "";
+            var date = results[i].get("date") || "";
+            var subject = results[i].get("subject") || "";
+            var notes = results[i].get("notes") || "";
+            var ending = results[i].get("endTime") || "";
+            var latitudeParse = results[i].get("latitude") || "";
+            var longitudeParse = results[i].get("longitude") || "";
+            var starting = results[i].get("startTime") || "";
+            var name = results[i].get("name");
+
+           $("#tableBody").append("<tr><td>" + name + "</td><td>" + subject + "</td><td>" + notes + "</td><td>" + contact + "</td><td>" + date + "</td><td>" + starting + "</td><td>" + ending + "</td> </tr>"); 
+
+          }
+
+          },
+          error: function(mapperList, error){
+            alert(error.code + " " + error.message);
+          }
+
+
+    });
+      // end of Parse data
+
 
 					$.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id+"?fields=first_name", function(response) {
 					    var firstName = response["first_name"];

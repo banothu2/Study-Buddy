@@ -5,54 +5,26 @@ $(document).ready(
 			window.location.replace("../auth/login.html");
 		}
 		else{
-
-			var d = new Date();
-				var month=new Array();
-				month[0]="January";
-				month[1]="February";
-				month[2]="March";
-				month[3]="April";
-				month[4]="May";
-				month[5]="June";
-				month[6]="July";
-				month[7]="August";
-				month[8]="September";
-				month[9]="October";
-				month[10]="November";
-				month[11]="December";
-			if ($("#CurrentDate").length > 0){
-				$("#CurrentDate").append("" + month[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear());
-			}
-
-
-
-
-
-
-
 					var User = Parse.Object.extend("User");
-
 					var facebookUserId = Parse.User.current().get("authData");
-					var universityKey = Parse.User.current().relation("Universities").parent.get("universityId").id;
-					var Universities = Parse.Object.extend("Universities");
-					var query = new Parse.Query(Universities);
+					//var universityKey = Parse.User.current().relation("Universities").parent.get("universityId").id;
 
-					query.get(universityKey, {
-						success: function(results){
-							var universityFullName = results.get("university");
-							var universityShortName = results.get("universityKey");
-						$("#UniversityFullNameDash").append(universityFullName);
-						$("#UniversityShortFormDash").append(universityShortName);
-						}
-					});
+					var user = new User();
+					user.id = Parse.User.current().id;
 
-					$.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id+"?fields=first_name", function(response) {
+
+					$.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id, function(response) {
 					    var firstName = response["first_name"];
+					    var lastName = response["last_name"];
 					    $("#firstName").append(firstName);
+					    $("#firstNameInput").empty()
+					    $("#lastNameInput").empty()
+					    $("#firstNameInput").append("<input type='text' name='bazinga' id='firstNameOutput' value='" + firstName + "' disabled='disabled'/>");
+					    $("#lastNameInput").append("<input type='text' name='bazinga' id='lastNameOutput' value='"+ lastName+ "' disabled='disabled'/>");
 
 					});
 
-/*					$.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id+"?fields=cover", function(response) {
+					/* $.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id+"?fields=cover", function(response) {
 					    var coverUrl = response["cover"].source;
 					    $("#coverPicture").append("<img src='"+coverUrl+"'>");
 
@@ -60,22 +32,36 @@ $(document).ready(
 
 					$("#profilePicture").append("<img width='80' src='https://graph.facebook.com/" +facebookUserId.facebook.id+"/picture?type=normal'>");
 
-					if ($("#logOut").length > 0){
-						$("#logOut").click(
+					  $("form").submit(
+					  	function(){
+					  	var University = Parse.Object.extend("Universities");
 
-							function (){
+					  	var university = new University();
+						university.id = $("#universityInput").val();
+						var firstName = $("#firstNameOutput").val();
+						var lastName = $("#lastNameOutput").val();
+					    var email = $("#emailInput").val();
+					    var phone = $("#phoneInput").val();
+					    var yearInSchool = $("#yearInSchoolInput").val();
+						
+						user.set("firstName", firstName);
+						user.set("lastName", lastName);
+					    user.set("email", email);
+					    user.set("phone", phone);
+					    user.set("yearInSchool", yearInSchool);
+					    user.set("universityId", university);
 
-								Parse.User.logOut();
-								 
-								var currentUser = Parse.User.current();  // this will now be null
+					    user.save(null, {
+					    	success: function(user){
+					    		window.location.replace("../public/index.html");
 
-								window.location.replace("../auth/login.html");
+					    	}, 
+					  		error: function(user, error){
+					  			alert("Error: " + error.code + " " + error.message);
+					  		}
 
-							}
-						);
-					}
-
-
+					  	});
+					  });	
 		}
 	}
 	);

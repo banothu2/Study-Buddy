@@ -172,81 +172,64 @@
         </div>
 
 
-        <div class="fluid">
-        
-            <!-- Wizard with custom fields validation -->
-            <div class="widget">
-                <div class="whead"><h6>Please fill in the missing information!</h6></div>
-                <form id="wizard2" method="post" action="submit.html" class="main">
-                    <fieldset class="step" id="w2first">
-                        <h1>Required Information</h1>
 
+
+        <div class="fluid">
+            <form id="validate">
+                <fieldset>
+                    <div class="widget">
+                        <div class="whead"><h6>Please fill in the following information!</h6></div>
                         <div class="formRow">
                             <div class="grid3"><label>University:<span class="req">*</span></label></div>
                             <div class="grid9">
-                                <select data-placeholder="Choose your University..." id="minselect" tabindex="2" >
-                                    <option value="University Of Illinois - Urbana Champaign">University Of Illinois - Urbana Champaign</option> 
-                                    <option value="Case Western Reserve University">Case Western Reserve University</option> 
-                                    <option value="Canada">Canada</option> 
-                                    <option value="Cape Verde">Cape Verde</option> 
-                                    <option value="Cayman Islands">Cayman Islands</option> 
-                                    <option value="Central African Republic">Central African Republic</option> 
-                                    <option value="Chad">Chad</option> 
-                                    <option value="Chile">Chile</option> 
-                                    <option value="China">China</option> 
-                                    <option value="Christmas Island">Christmas Island</option> 
-                                    <option value="Cocos (Keeling) Islands">Cocos (Keeling) Islands</option> 
-                                    <option value="Colombia">Colombia</option> 
-                                    <option value="Comoros">Comoros</option> 
-                                    <option value="Congo">Congo</option> 
-                                    <option value="Congo, The Democratic Republic of The">Congo, The Democratic Republic of The</option> 
-                                    <option value="Cook Islands">Cook Islands</option> 
-                                    <option value="Costa Rica">Costa Rica</option> 
-                                    <option value="Cote D'ivoire">Cote D'ivoire</option> 
-                                    <option value="Croatia">Croatia</option> 
-                                    <option value="Cuba">Cuba</option> 
-                                    <option value="Cyprus">Cyprus</option> 
-                                    <option value="Czech Republic">Czech Republic</option> 
-                                    <option value="Denmark">Denmark</option> 
+                                <select data-placeholder="Choose your University..." id="universityInput" tabindex="2">
+                                    <option value="5kCPPpH5I5">University Of Illinois - Urbana Champaign</option> 
+                                    <option value="ih25qG1u1N">Case Western Reserve University</option> 
                                 </select>
                             </div>             
                         </div>
                         <div class="formRow">
-                            <div class="grid3"><label>First Name:<span class="req">*</span></label></div>
-                            <div class="grid5"><input type="text" name="bazinga" /></div>
-                        </div>
-                        <div class="formRow">
-                            <div class="grid3"><label>Last Name:</label></div>
-                            <div class="grid5"><input type="text" name="pw1" id="pw1" /></div>
+                            <div class="grid3"><label>Name:<span class="req">*</span></label></div>
+                            <div id="firstNameInput" class="grid3">
+                                <input type="text" name="bazinga" id="firstNameOutput" />
+                             </div>
+                            <div id="lastNameInput" class="grid3">
+                                <input type="text" name="bazinga" id="lastNameOutput" />
+                             </div>
                         </div>
                         <div class="formRow">
                             <div class="grid3"><label>Email:<span class="req">*</span></label></div>
-                            <div class="grid5"><input type="text" name="email" /></div>
+                            <div class="grid5"><input type="text" name="email" id="emailInput"/></div>
                         </div>
-                    </fieldset>
-                    <fieldset id="w2confirmation" class="step">
-                        <h1>Optional Information - Helps in future site use!</h1>
                         <div class="formRow">
                             <div class="grid3"><label>Phone Number:</label></div>
-                            <div class="grid9"><input type="text" name="city1" id="city1" /></div>
+
+                            <div class="grid9">
+                                <input type="text" class="maskPhone" value="" id="phoneInput"/>
+                                <span class="note">(999) 999-9999</span>
+                            </div>
                         </div>
                         <div class="formRow">
-                            <div class="grid3"><label>Current Year in School:</label></div>
-                            <div class="grid9"><input type="text" name="smth1" id="smth1" /></div>
+                            <div class="grid3">
+                                <label>Current Year in School:</label>
+                            </div>
+                            <div class="grid9">
+                                <select name="unstyled-dropdown" class="unstyled" id="yearInSchoolInput">
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year </option>
+                                    <option value="5">5th Year</option>
+                                    <option value="6">6th Year</option>
+                                </select>
+                            </div>
                         </div>
-                    </fieldset>
-                    <div class="formRow">
-                        <div class="status" id="status2"></div>
-                        <div class="formSubmit">
-                            <input class="buttonM bDefault" id="back2" value="Back" type="reset" />
-                            <input class="buttonM bRed ml10" id="next2" value="Next" type="submit" />
-                        </div>
+                        <div class="formRow"><input type="submit" value="Submit" class="buttonM bBlack formSubmit" /></div>
                     </div>
-                </form>
-                <div class="data" id="w2"></div>
-            </div>
-        
+                </fieldset>
+            </form>
         </div>
+
     </div>
 </div>
 <!-- Content ends -->
