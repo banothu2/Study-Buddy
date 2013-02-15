@@ -130,10 +130,10 @@
         <div class="user">
             <a title="" class="leftUserDrop" id="profilePicture"></a><span id="firstName"></span>
             <ul class="leftUser">
-                <li><a href="#" title="" class="sProfile">My profile</a></li>
+                <li><a href="../public/profile.php" title="" class="sProfile">My profile</a></li>
                 <li><a href="#" title="" class="sMessages">Messages</a></li>
                 <li><a href="#" title="" class="sSettings">Settings</a></li>
-                <li><a href="#" title="" class="sLogout">Logout</a></li>
+                <li><a href="#" title="" class="sLogout" id="logOut">Logout</a></li>
             </ul>
         </div>
         
