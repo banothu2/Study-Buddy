@@ -1,11 +1,9 @@
 var currentUser = Parse.User.current();
-$(document).ready(
-	function(){
-		if(!currentUser){
-			window.location.replace("../auth/login.html");
-		}
-		else{
 
+if(currentUser){
+
+	$(document).ready(
+		function(){
 			var d = new Date();
 				var month=new Array();
 				month[0]="January";
@@ -40,6 +38,11 @@ $(document).ready(
 						}
 					});
 
+
+
+      // end of Parse data
+
+
 					$.getJSON("https://graph.facebook.com/"+facebookUserId.facebook.id+"?fields=first_name", function(response) {
 					    var firstName = response["first_name"];
 					    $("#firstName").append(firstName);
@@ -54,22 +57,33 @@ $(document).ready(
 
 					$("#profilePicture").append("<img width='80' src='https://graph.facebook.com/" +facebookUserId.facebook.id+"/picture?type=normal'>");
 
-					if ($("#logOut").length > 0){
-						$("#logOut").click(
-
+						$("#logOut1").click(
 							function (){
-
 								Parse.User.logOut();
-								 
 								var currentUser = Parse.User.current();  // this will now be null
-
 								window.location.replace("../auth/login.html");
-
 							}
 						);
-					}
+						$("#logOut2").click(
+							function (){
+								Parse.User.logOut();
+								var currentUser = Parse.User.current();  // this will now be null
+								window.location.replace("../auth/login.html");
+							}
+						);
+						$("#logOut3").click(
+							function (){
+								Parse.User.logOut();
+								var currentUser = Parse.User.current();  // this will now be null
+								window.location.replace("../auth/login.html");
+							}
+						);
 
 
 		}
-	}
 	);
+}
+else{
+		window.location.replace("../auth/login.html");
+
+}

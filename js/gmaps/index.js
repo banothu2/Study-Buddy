@@ -1,7 +1,6 @@
-  var map;
-    $(document).ready(
-      function(){
-        
+$(document).ready(
+    function(){
+        var map;        
         //executes to obtain related geo data
         var universityKey = Parse.User.current().relation("Universities").parent.get("universityId").id;
         var Universities = Parse.Object.extend("Universities");

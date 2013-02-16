@@ -11,8 +11,8 @@ require_once('../../system/templates/header_template.php');
     <div class="breadLine">
         <div class="bc">
             <ul id="breadcrumbs" class="breadcrumbs">
-                <li><a href="index.html">Dashboard</a></li>
-                <li class="current"><a href="ui_grid.html" title="">Profile</a></li>
+                <li><a href="../public/index.html">Dashboard</a></li>
+                <li class="current"><a href="../user/profile.php" title="">Profile</a></li>
             </ul>
         </div>
     </div>
