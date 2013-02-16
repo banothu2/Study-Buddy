@@ -2,7 +2,7 @@ var currentUser = Parse.User.current();
 $(document).ready(
 	function(){
 		if(currentUser){
-			window.location.replace("../public/index.html");
+			window.location.replace("../public/index.php");
 		}
 		else{
 						$("#recover").submit(
@@ -10,7 +10,7 @@ $(document).ready(
 								Parse.User.logIn($("#inputUsername").val(), $("#inputPassword").val(), { //$("#inputUsername").val(), $("#inputPassword").val()
 									success: function(user) {
 										//if login success, then redirect page to index.html
-										window.location.replace("../public/index.html");
+										window.location.replace("../public/index.php");
 
 									},
 									error: function(user, error) {
@@ -39,7 +39,7 @@ $(document).ready(
 
 								    } else {
 								      //alert("User logged in through Facebook!");
-								      window.location.replace("../public/index.html");
+								      window.location.replace("../public/index.php");
 
 								    }
 								  },
@@ -48,7 +48,8 @@ $(document).ready(
 										$("#errorFacebook").append("<div class='nNote nFailure'> Oh snap! The user cancelled the Facebook login or did not fully authorize! Try again!</div>");
 								    //alert("User cancelled the Facebook login or did not fully authorize.");
 								  }
-								});
+								}
+								);
 								return false;
 							}
 						);

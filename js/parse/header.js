@@ -54,21 +54,34 @@ $(document).ready(
 
 					$("#profilePicture").append("<img width='80' src='https://graph.facebook.com/" +facebookUserId.facebook.id+"/picture?type=normal'>");
 
-					if ($("#logOut").length > 0){
-						$("#logOut").click(
 
+					if ($("#logOut1").length > 0){
+						$("#logOut1").click(
 							function (){
-
 								Parse.User.logOut();
-								 
 								var currentUser = Parse.User.current();  // this will now be null
-
 								window.location.replace("../auth/login.html");
-
 							}
 						);
 					}
-
+					if ($("#logOut2").length > 0){
+						$("#logOut2").click(
+							function (){
+								Parse.User.logOut();
+								var currentUser = Parse.User.current();  // this will now be null
+								window.location.replace("../auth/login.html");
+							}
+						);
+					}
+					if ($("#logOut3").length > 0){
+						$("#logOut3").click(
+							function (){
+								Parse.User.logOut();
+								var currentUser = Parse.User.current();  // this will now be null
+								window.location.replace("../auth/login.html");
+							}
+						);
+					}
 
 		}
 	}
