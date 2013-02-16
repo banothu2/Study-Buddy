@@ -7,14 +7,6 @@
 
 <link href="../../css/styles.css" rel="stylesheet" type="text/css" />
 <!--[if IE]> <link href="css/ie.css" rel="stylesheet" type="text/css"> <![endif]-->
-<!-- script for maps -->
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-  <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-  <script type="text/javascript" src="../../js/gmaps/gmaps.js"></script>
-  <link rel="stylesheet" type="text/css" href="../../css/maps.css" />
-  <script type="text/javascript" src="../../js/gmaps/index.js"></script>
-<!-- end of script for maps -->
 <!-- start of template files -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
@@ -138,10 +130,10 @@
         <div class="user">
             <a title="" class="leftUserDrop" id="profilePicture"></a><span id="firstName"></span>
             <ul class="leftUser">
-                <li><a href="#" title="" class="sProfile">My profile</a></li>
+                <li><a href="../public/profile.php" title="" class="sProfile">My profile</a></li>
                 <li><a href="#" title="" class="sMessages">Messages</a></li>
                 <li><a href="#" title="" class="sSettings">Settings</a></li>
-                <li><a href="#" title="" class="sLogout">Logout</a></li>
+                <li><a href="#" title="" class="sLogout" id="logOut">Logout</a></li>
             </ul>
         </div>
         
@@ -384,92 +376,3 @@
 </div>
 <!-- Sidebar ends -->
     
-    
-<!-- Content begins -->
-<div id="content">
-    <div class="contentTop">
-        <span class="pageTitle"><span class="icon-screen"></span><span id="UniversityFullNameDash"> </span></span>
-        <ul class="quickStats">
-            <li>
-                <a href="" class="blueImg"><img src="../../images/icons/quickstats/plus.png" alt="" /></a>
-                <div class="floatR"><strong class="blue">5489</strong><span>Geos</span></div>
-            </li>
-            <li>
-                <a href="" class="redImg"><img src="../../images/icons/quickstats/user.png" alt="" /></a>
-                <div class="floatR"><strong class="blue">4658</strong><span>Users</span></div>
-            </li>
-            <li>
-                <a href="" class="greenImg"><img src="../../images/icons/quickstats/money.png" alt="" /></a>
-                <div class="floatR"><strong class="blue">0</strong><span>Donated</span></div>
-            </li>
-        </ul>
-    </div>
-<!--     <div id="coverPicture">
-
-    </div> -->
-    <!-- Breadcrumbs line -->
-    <div class="breadLine">
-        <div class="bc">
-            <ul id="breadcrumbs" class="breadcrumbs">
-                <li><a href="#">Dashboard</a></li>
-                <li class="current"><a href="ui_grid.html" title="">Home Page</a></li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- Main content -->
-    <div class="wrapper">
-    
-    	<!-- Chart -->
-
-
-        <div class="widget">
-                <div class="whead">
-                    <h6>Maps</h6>
-                    <div class="headInput">
-                        <form method="post" id="geocoding_form">
-                            <input type="text" name="headSearch" placeholder="Enter Address Here..." name="address" id="address"/>
-                            <input type="submit" name="find" class="srch" value="" />
-                        </form>
-                    </div>
-                </div>
-            <div class="body">
-
-                <div id="map">
-                </div>
-            </div>
-        </div>
-
-        <div class="widget">
-        <div class="whead"><h6>Quick view of Geos</h6></div>
-        <div id="dyn" class="hiddenpars">
-            <a class="tOptions" title="Options"><img src="../../images/icons/options" alt="" /></a>
-            <table cellpadding="0" cellspacing="0" border="0" class="dTable" id="dynamic">
-            <thead>
-            <tr>
-            <th>Full Name<span class="sorting" style="display: block;"></span></th>
-            <th>Subject</th>
-            <th>Notes</th>
-            <th>Contact Info</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            </tr>
-            </thead>
-            <tbody id="tableBody">
-            </tbody>
-            </table> 
-        </div>
-        </div>    
-        
-        
-        
-        
-    </div>
-    <!-- Main content ends -->
-    
-</div>
-<!-- Content ends -->
-
-</body>
-</html>

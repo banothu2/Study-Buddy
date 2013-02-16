@@ -42,13 +42,13 @@ $(document).ready(
 						var lastName = $("#lastNameOutput").val();
 					    var email = $("#emailInput").val();
 					    var phone = $("#phoneInput").val();
-					    var yearInSchool = $("#yearInSchoolInput").val();
+					    var graduationYear = $("#graduationYearInput").val();
 						
 						user.set("firstName", firstName);
 						user.set("lastName", lastName);
 					    user.set("email", email);
 					    user.set("phone", phone);
-					    user.set("yearInSchool", yearInSchool);
+					    user.set("graduationYear", yearInSchool);
 					    user.set("universityId", university);
 
 					    user.save(null, {
