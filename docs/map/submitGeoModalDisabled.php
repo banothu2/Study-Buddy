@@ -26,7 +26,7 @@ require_once('../../system/templates/header_template.php');
 
 
                         url = GMaps.staticMapURL({
-                          size: [300, 234],
+                          size: [300, 300],
                           lat: latlng.lat(),
                           lng: latlng.lng(),
                           markers: [
@@ -50,59 +50,7 @@ require_once('../../system/templates/header_template.php');
                 }
             );
 
-
-
-$("#submitGeoData").click(
-    function(){
-
-
-            //              Parse.User.logIn($("#inputUsername").val(), $("#inputPassword").val(), {
-                            var Map = Parse.Object.extend("Map");
-                            var Map = new Map();
-                                                        
-
-                            var d = new Date();
-                            var dateCheck = d.getTime();
-                            if($("#inputLatitudeLoaded").length == 0  || $("#inputLongitudeLoaded").length == 0 ){
-                                $("#error").empty();
-                                $("#error").append("<div class='nNote nFailure'>Oh oh! The location is missing! </div>");
-                            }
-                            else{
-                            Map.save({
-
-                              universityId: Parse.User.current().relation("Universities").parent.get("universityId"),
-                              userId: Parse.User.current(),
-                              address: $("#inputAddress").val(),
-                              latitude: $("#inputLatitudeLoaded").val(),
-                              longitude: $("#inputLongitudeLoaded").val(),
-                              name: $("#inputFullNameLoaded").val(),
-                              subject: $("#inputSubject").val(),
-                              startTime: $("#outputStartTime").val(),
-                              endTime: $("#outputEndTime").val(),
-                              notes: $("#outputNotes").val(),
-                              contact: $("#inputEmailLoaded").val(),
-                              studyDate: $("#date").val(),
-                              date: dateCheck
-                              
-                            }, {
-                              success: function(map) {
-                                // The object was saved successfully.
-                                $("#error").empty();
-                                $("#error").append("<div class='nNote nSuccess'><p>Your submission has been successfully recorded and added to the map!</p></div>");
-                              },
-                              error: function(map, error) {
-                                // The save failed.
-                                $("#error").empty();
-                                $("#error").append("<div class='nNote nFailure'>Oh oh! Something went wrong! Please try again. </div>");
-                                // error is a Parse.Error with an error code and description.
-                              }
-                            }); 
-                            }
-
-    });
-
 });
-
 /*
     var map;
       //Search form - Geocoding
@@ -142,15 +90,29 @@ $("#submitGeoData").click(
     
     <!-- Main content -->
     <div class="wrapper">
-        <div class="enterMessage">
-            <input type="text" name="enterMessage" placeholder="Enter your location..." id="inputAddress"/>
-            <div class="sendBtn">
-                <input type="submit" name="sendMessage" class="buttonS bLightBlue"  id="UseThisLocation" value="Use this Location!" />
-            </div>
-            <div id="error"></div>
-        </div>
+        <div class="fluid">
+            <div class="widget grid12">
+                <div class="whead"><h6>Submit your Study Location:</h6></div>
+                <div class="body">
+                    <ul class="updates">
+                        <li>
+                            <span class="uNotice">
+                                <a href="#" title="" id="mapper">Meat a new team member - Don Corleone</a>
+                                <span>Very dyplomatic and flexible sales manager</span>
+                            </span>
+                        </li>
+                    </ul>            
+                    <div class="wButton"><a href="#" title="" class="buttonL bLightBlue first" id="modal_open">Submit your data!</a></div>
 
-
+                        <div id="dialog-modal" title="Basic modal dialog">
+                                    <div class="enterMessage">
+                                        <input type="text" name="enterMessage" placeholder="Enter your location..." id="inputAddress"/>
+                                        <div class="sendBtn">
+                                            <input type="submit" name="sendMessage" class="buttonS bLightBlue"  id="UseThisLocation" value="Use this Location!" />
+                                        </div>
+                                        <div id="error"></div>
+                                    </div>
+                                      <div class="divider"><span></span></div>
                             <div class="fluid">
 
                                 <div class="widget grid6">
@@ -178,22 +140,20 @@ $("#submitGeoData").click(
                                 </div>
                                 <div class="widget grid6">
                                     <div class="formRow fluid">
-                                        <div class="grid6" id="inputLatitude"><input type="text" name="regular" placeholder="Enter your location above! "  disabled="disabled" ></div>
-                                        <div class="grid6" id="inputLongitude"><input type="text" name="regular" placeholder="Enter your location above! "  disabled="disabled" ></div>
+                                        <div class="grid6" id="inputLatitude"></div>
+                                        <div class="grid6" id="inputLongitude"></div>
                                     </div>
                                     <div class="formRow fluid">
-                                        <div id="mapStatic">
-                                          <img width="100%" src="../../images/placeholder/mapPlaceholder.jpg">
-                                        </div>
+                                        <div id="mapStatic"> </div>
                                     </div>
                               
                                 </div>
                             </div>
-
-
-
-                    <div class="wButton"><a href="#" title="" class="buttonL bLightBlue first" id="submitGeoData">Submit your data!</a></div>
-
+                               
+                        </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <!-- Main content ends -->

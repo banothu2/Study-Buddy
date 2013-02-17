@@ -867,11 +867,57 @@ $(function() {
 	
     $('#dialog-modal').dialog({
 		autoOpen: false, 
-		width: 400,
+		width: 700,
+		height: 500,
 		modal: true,
 		buttons: {
-				"Yep!": function() {
-					$( this ).dialog( "close" );
+				"Submit your Geo!": function() {
+/*					
+			//				Parse.User.logIn($("#inputUsername").val(), $("#inputPassword").val(), {
+							var Map = Parse.Object.extend("Map");
+							var Map = new Map();
+							 			                
+
+							var d = new Date();
+                			var dateCheck = d.getTime();
+                			if($("#inputLatitudeLoaded").length == 0  || $("#inputLongitudeLoaded").length == 0 ){
+                				$("#error").empty();
+							   	$("#error").append("<div class='nNote nFailure'>Oh oh! The location is missing! </div>");
+							   	alert("hello");
+                			}
+                			else{
+                				alert("bye");
+							Map.save({
+
+							  universityId: Parse.User.current().relation("Universities").parent.get("universityId"),
+							  userId: Parse.User.current(),
+							  address: $("#inputAddress").val(),
+							  latitude: $("#inputLatitudeLoaded").val(),
+							  longitude: $("#inputLongitudeLoaded").val(),
+							  name: $("#inputFullNameLoaded").val(),
+							  subject: $("#inputSubject").val(),
+							  startTime: $("#outputStartTime").val(),
+							  endTime: $("#outputEndTime").val(),
+							  notes: $("#outputNotes").val(),
+							  contact: $("#inputEmailLoaded").val(),
+							  studyDate: $("#date").val(),
+							  date: dateCheck
+							  
+							}, {
+							  success: function(map) {
+							    // The object was saved successfully.
+							   	$("#error").empty();
+							   	$("#error").append("<div class='nNote nSuccess'><p>Your submission has been successfully recorded and added to the map!</p></div>");
+							  },
+							  error: function(map, error) {
+							    // The save failed.
+							   	$("#error").empty();
+							   	$("#error").append("<div class='nNote nFailure'>Oh oh! Something went wrong! Please try again. </div>");
+							    // error is a Parse.Error with an error code and description.
+							  }
+							}); 
+							}*/
+						$( this ).dialog( "close" );
 				}
 			}
 		});

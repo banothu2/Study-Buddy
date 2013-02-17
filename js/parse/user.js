@@ -15,7 +15,7 @@ $(document).ready(
 
 
             var contact = results[i].get("contact") || "";
-            var date = results[i].get("date") || "";
+            var date = results[i].get("studyDate") || "";
             var subject = results[i].get("subject") || "";
             var notes = results[i].get("notes") || "";
             var ending = results[i].get("endTime") || "";

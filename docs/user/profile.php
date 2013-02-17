@@ -64,31 +64,36 @@ require_once('../../system/templates/header_template.php');
                             <div class="whead"><h6>Course Details</h6></div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course One:</label></div>
-                                <div class="grid9" id="profileCourseOne"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseOne"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
                             </div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course Two:</label></div>
-                                <div class="grid9" id="profileCourseTwo"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseTwo"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
                             </div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course Three:</label></div>
-                                <div class="grid9" id="profileCourseThree"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseThree"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
                             </div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course Four:</label></div>
-                                <div class="grid9" id="profileCourseFour"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseFour"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
                             </div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course Five:</label></div>
-                                <div class="grid9" id="profileCourseFive"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseFive"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
                             </div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course Six:</label></div>
-                                <div class="grid9" id="profileCourseSix"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseSix"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
                             </div>
                             <div class="formRow">
                                 <div class="grid3"><label>Course Seven:</label></div>
-                                <div class="grid9" id="profileCourseSeven"><span class="note">Caps & short form. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                                <div class="grid9" id="profileCourseSeven"><span class="note">Caps. Ex: CHEM 102, CSIS 1119, 5.067</span></div>
+                            </div>
+                            <div class="body" align="center" id="updateClassesButton">
+                                <a class="buttonM bGreen" id="updateClasses"><span class="icol-refresh2"></span><span>Update Classes</span></a>
+                            </div>
+                            <div id="errorClasses">
                             </div>
                  </div>
                     </fieldset>
@@ -127,7 +132,12 @@ require_once('../../system/templates/header_template.php');
                                 <div class="grid3"><label>Graduation Year:</label></div>
                                 <div class="grid9" id="profileGraduationYear"></div>
                             </div>
-                 </div>
+                            <div class="body" align="center" id="updateBasicInfoButton">
+                                <a class="buttonM bBlue" id="updateBasicInfo"><span class="icol-refresh2"></span><span>Update Basic Info</span></a>
+                            </div>
+                             <div id="errorBasic">
+                            </div>
+                        </div>
                     </fieldset>
                 </form>
                 
@@ -139,64 +149,24 @@ require_once('../../system/templates/header_template.php');
 
 
 
-                <div class="widget">
-            <div class="whead"><h6>My Past Geo Posts:</h6></div>
-            
+
+        <div class="widget">
+        <div class="whead"><h6>My Past Geos</h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
                 <thead>
                     <tr>
+                        <td>Full Name<span class="sorting" style="display: block;"></span></td>
                         <td>Subject</td>
                         <td>Notes</td>
                         <td>Contact Info</td>
                         <td>Date</td>
-                        <td>State Time</td>
+                        <td>Start Time</td>
                         <td>End Time</td>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Row 1</td>
-                        <td>Row 2</td>
-                        <td>Row 3</td>
-                        <td>Row 4</td>
-                        <td>Row 5</td>
-                        <td>Row 5</td>
-                    </tr>
-                    <tr>
-                        <td>Row 1</td>
-                        <td>Row 2</td>
-                        <td>Row 3</td>
-                        <td>Row 4</td>
-                        <td>Row 5</td>
-                        <td>Row 5</td>
-                    </tr>
-                    <tr>
-                        <td>Row 1</td>
-                        <td>Row 2</td>
-                        <td>Row 3</td>
-                        <td>Row 4</td>
-                        <td>Row 5</td>
-                        <td>Row 5</td>
-                    </tr>
-                    <tr>
-                        <td>Row 1</td>
-                        <td>Row 2</td>
-                        <td>Row 3</td>
-                        <td>Row 4</td>
-                        <td>Row 5</td>
-                        <td>Row 5</td>
-                    </tr>
-                    <tr>
-                        <td>Row 1</td>
-                        <td>Row 2</td>
-                        <td>Row 3</td>
-                        <td>Row 4</td>
-                        <td>Row 5</td>
-                        <td>Row 5</td>
-                    </tr>
-
+                <tbody id="tableBody">
                 </tbody>
-            </table>
+            </table> 
         </div>
     
 

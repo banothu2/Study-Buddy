@@ -69,6 +69,55 @@
 <script type="text/javascript" src="../../js/parse/initialize.js"></script>
 <script type="text/javascript" src="../../js/parse/login.js"></script>
 <!-- Parse End -->
+
+
+<!-- script for maps -->
+  <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+  <script type="text/javascript" src="../../js/gmaps/gmaps.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../css/maps.css" />
+<!-- end of script for maps -->
+<script>
+$(document).ready(
+    function(){
+        var map;        
+        //executes to obtain related geo data
+        
+        map = new GMaps({
+          div: '#map',
+          zoom: 15,
+          lat: 40.107528,
+          lng: -88.227232,
+
+          markerClusterer: function(map) {
+            return new MarkerClusterer(map);
+          },
+          // map control options enabled
+          mapTypeControlOptions: {
+            mapTypeIds : ["hybrid", "roadmap", "satellite", "terrain", "osm", "cloudmade"]
+          }
+
+        });
+
+      var lat_span = 40.095988012939503 - 40.110677786181573;
+      var lng_span = -88.21528673535154 - -88.24137926464841;
+
+      for(var i = 0; i < 100; i++) {
+        var latitude = Math.random()*(lat_span) + 40.110677786181573;
+        var longitude = Math.random()*(lng_span) + -88.24137926464841;
+
+        map.addMarker({
+          lat: latitude,
+          lng: longitude,
+          title: 'Marker #' + i,
+          infoWindow: {
+            content: 'Sign in to view/post Geo Points!'
+          }
+        });
+      }
+            // end of Parse data
+});
+</script>
 </head>
 
 <body>
@@ -121,7 +170,16 @@
     </div>
 </div>
 <!-- Top line ends -->
+<div class="fluid">
+    <div class="divider"><span></span></div>
 
+  <div class="wrapper">
+      <div class="widget">
+    <div id="map"></div>
+      </div>
+  </div>
+  <div class="divider"><span></span></div>
+<div> 
 
 <!-- Login wrapper begins -->
 <div class="loginWrapper">
