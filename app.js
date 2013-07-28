@@ -28,6 +28,7 @@ app.configure(function(){
 	// 404 page redirect
 	app.use(function(req, res){
 		res.send(404, "four-oh-four");
+
 	});
 	// specified error responder 
 	app.use(function(err, req, res, next){
@@ -63,6 +64,7 @@ app.param('username', function(req, res, next, username){
 	}
 })
 
+
 // ---------- Map Routes
 app.map = function(obj, route){
 	route = route || '';
@@ -81,6 +83,11 @@ app.map = function(obj, route){
 }
 
 app.map({
+	'/' : {
+		get: function(req, res){
+			res.send("Home!");
+		}
+	},
 	'/username': {
 		get: function(req, res) {res.send("all usernames")},
 		'/:username':{
@@ -88,6 +95,13 @@ app.map({
 				res.send(req.username + "'s profile");
 			}
 			
+		}
+	},
+	'/hello': {
+		get: function(req, res){
+			res.render('sample.jade', {
+				title: "Study Buddy"
+			});
 		}
 	}
 });
