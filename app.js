@@ -9,60 +9,6 @@ var express = require('express')
   , http = require('http')
   , path = require('path');
 
-var mongoose = require('mongoose')
-  , Schema = mongoose.Schema
-  , ObjectId = mongoose.SchemaTypes.ObjectId;
-  
-mongoose.connect('mongodb://localhost/test'); 
-
-var conf = require('./config/oauth_providers');
-var UserSchema = new Schema({})
-    , User;
-var mongooseAuth = require('mongoose-auth');
-
-UserSchema.plugin(mongooseAuth, {
-  everymodule: {
-    everyauth: {
-      User: function() {
-        return User;
-      }
-    }
-  },
-  facebook: {
-    everyauth: {
-      myHostname: 'http://local.host:3000',
-      appId: conf.fb.appId,
-      appSecret: conf.fb.appSecret,
-      redirectPath: '/'
-    }
-  },
-  twitter: {
-    everyauth: {
-      myHostname: 'http://local.host:3000',
-      consumerKey: conf.twit.consumerKey,
-      consumerSecret: conf.twit.consumerSecret,
-      redirectPath: '/'
-    }
-  },
-  github: {
-    everyauth: {
-      myHostname: 'http://local.host:3000',
-      appId: conf.github.appId,
-      appSecret: conf.github.appSecret,
-      redirectPath: '/'
-    }
-  }
-});
-
-mongoose.model('User', UserSchema);
-
-mongoose.connect('mongodb://localhost/example');
-
-User = mongoose.model('User');
-
-
-
-
 var app = express();
 
 
@@ -74,9 +20,6 @@ app.configure(function(){
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
-	app.use(express.cookieParser());
-  	app.use(express.session({secret: 'secret'}));
-  	app.use(mongooseAuth.middleware());
 	app.use(express.methodOverride());
 
 	app.use(app.router);
@@ -92,20 +35,14 @@ app.configure(function(){
 		res.status(err.status || 404);
 		res.send(err.message);
 	})
-});
 
-mongooseAuth.helpExpress(app);
+
+});
 
 // development only
 if ('development' == app.get('env')) { 
   app.use(express.errorHandler());
 }
-
-
-
-
-
-
 
 //app.get('/', routes.index);
 //app.get('/users', user.list);
