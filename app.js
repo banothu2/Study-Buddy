@@ -1,181 +1,288 @@
-
 /**
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , http = require('http')
-  , path = require('path')
-  , passport = require('passport')
-  , util = require('util')
-  , FacebookStrategy= require('passport-facebook').Strategy;
-
-var FACEBOOK_APP_ID = "532629850094137"
-var FACEBOOK_APP_SECRET = "03e0c0e52c7d3b1987c219c27d30c9a0";
-
-// Passport session setup.
-//   To support persistent login sessions, Passport needs to be able to
-//   serialize users into and deserialize users out of the session.  Typically,
-//   this will be as simple as storing the user ID when serializing, and finding
-//   the user by ID when deserializing.  However, since this example does not
-//   have a database of user records, the complete Facebook profile is serialized
-//   and deserialized.
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-
-passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      
-      // To keep the example simple, the user's Facebook profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Facebook account with a user record in your database,
-      // and return that user instead.
-      return done(null, profile);
-    });
-  }
-));
+var express = require('express'),
+    http = require('http'),
+    path = require('path'),
+    mongoose = require('mongoose'),
+    passport = require("passport"),
+    LocalStrategy = require('passport-local').Strategy,
+    FacebookStrategy = require('passport-facebook').Strategy,
+    hash = require("./pass").hash,
+    flash = require("connect-flash"),
+    ObjectID = require("./node_modules/mongoose/node_modules/mongodb").ObjectID;
+    
 
 var app = express();
 
-// all environments
-app.configure(function(){
-	app.set('port', process.env.PORT || 3000);
-	app.set('views', __dirname + '/views');
-	app.set('view engine', 'jade');
-	app.use(express.favicon());
-	app.use(express.logger('dev'));
-	app.use(express.cookieParser());
-	app.use(express.bodyParser());
-	app.use(express.methodOverride());
-	app.use(express.session({ secret: 'pikachu' }));
-	app.use(passport.initialize());
-	app.use(passport.session());
-	app.use(app.router);
-	app.use(express.static(path.join(__dirname, 'public')));
-
-	// 404 page redirect
-	app.use(function(req, res){
-		res.send(404, "four-oh-four");
-
-	});
-	// specified error responder 
-	app.use(function(err, req, res, next){
-		res.status(err.status || 404);
-		res.send(err.message);
-	})
+/*
+Database and Models 
+*/
+mongoose.connect("mongodb://localhost/myapp");
 
 
+// Local Users Schema
+var LocalUserSchema = new mongoose.Schema({
+    username: String,
+    salt: String,
+    hash: String
 });
 
-// development only
-if ('development' == app.get('env')) { 
-  app.use(express.errorHandler());
+var Users = mongoose.model('userauths', LocalUserSchema);
+
+//Facebook Users Schema 
+var FacebookUserSchema = new mongoose.Schema({
+    fbId: String,
+    email: { type : String , lowercase : true},
+    name : String
+});
+var FbUsers = mongoose.model('fbs',FacebookUserSchema);
+
+/*
+* Configuration and Middlewares
+*/
+
+passport.use(new LocalStrategy(function(username, password,done){
+    Users.findOne({ username : username},function(err,user){
+        if(err) { return done(err); }
+        if(!user){
+            return done(null, false, { message: 'Incorrect username.' });
+        }
+
+        hash( password, user.salt, function (err, hash) {
+            if (err) { return done(err); }
+            if (hash == user.hash) return done(null, user);
+            done(null, false, { message: 'Incorrect password.' });
+        });
+    });
+}));
+
+passport.use(new FacebookStrategy({
+    clientID: "532629850094137",
+    clientSecret: "03e0c0e52c7d3b1987c219c27d30c9a0",
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    FbUsers.findOne({fbId : profile.id}, function(err, oldUser){
+        if(oldUser){
+            done(null,oldUser);
+        }else{
+            var newUser = new FbUsers({
+                fbId : profile.id ,
+                email : profile.emails[0].value,
+                name : profile.displayName
+            }).save(function(err,newUser){
+                if(err) throw err;
+                done(null, newUser);
+            });
+        }
+    }); 
+  }
+));
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+
+passport.deserializeUser(function(id, done) {
+    FbUsers.findById(id,function(err,user){
+        if(err) done(err);
+        if(user){
+            done(null,user);
+        }else{
+            Users.findById(id, function(err,user){
+                if(err) done(err);
+                done(null,user);
+            });
+        }
+    });
+});
+
+app.configure(function () {
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.favicon());
+    app.use(express.logger('dev'));
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.session({ secret: 'keyboard cat' }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.use(express.methodOverride());
+    app.use(flash());
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('development', function () {
+    app.use(express.errorHandler());
+});
+/*
+* Error Handling
+*/
+app.use(function(req, res, next){
+  res.status(404);
+  if (req.accepts('html')) {
+    res.render('error/404', { url: req.url });
+    return;
+  }
+  if (req.accepts('json')) {
+    res.send({ error: 'Not found' });
+    return;
+  }
+  res.type('txt').send('Not found');
+});
+
+app.use(function(err, req, res, next){
+  res.status(err.status || 500);
+  res.render('error/500', { error: err });
+});
+
+/*
+* Helpers
+*/
+function authenticatedOrNot(req, res, next){
+    if(req.isAuthenticated()){
+        next();
+    }else{
+        res.redirect("/login");
+    }
 }
 
-//app.get('/', routes.index);
-//app.get('/users', user.list);
-// ---------- Test code
+function userExist(req, res, next) {
+    Users.count({
+        username: req.body.username
+    }, function (err, count) {
+        if (count === 0) {
+            next();
+        } else {
+            res.redirect("/signup");
+        }
+    });
+}
 
+/*
+* Routes
+*/
 
 
 // ---------- Parameter Intercepters 
 app.param('username', function(req, res, next, username){
-	if(username != 'hello'){
-		req.username = username;
-		next();
-	} else {
-			// var err = new Error('username does not exist');
-			// pass error to next
-			// err.status = 'something-error' - can use case statement 
-			// next(err);
-		next(new Error("no username found"));
-	}
+    if(username != 'hello'){
+        req.username = username;
+        next();
+    } else {
+            // var err = new Error('username does not exist');
+            // pass error to next
+            // err.status = 'something-error' - can use case statement 
+            // next(err);
+        next(new Error("no username found"));
+    }
 })
 
 
-
-app.get('/', ensureAuthenticated, function(req, res){
-	//console.log("Session: %j", req.user);
-	//console.log(req.user)
-  res.render('index', { user: req.user, hello: JSON.stringify(req.user)});
+// ---------- Map Routes
+app.map = function(obj, route){
+    route = route || '';
+    for(var key in obj){
+        if(obj.hasOwnProperty(key)){
+            switch(typeof obj[key]){
+                case "object":
+                    app.map(obj[key], route + key);
+                    break;
+                case "function":
+                    app[key](route, obj[key]);
+                    break;
+            }
+        }
+    }
+}
+app.map({
+    '/username': {
+        get: function(req, res) {res.send("all usernames")},
+        '/:username':{
+            get: function(req, res, next) {
+                res.send(req.username + "'s profile");
+            }
+            
+        }
+    }
 });
 
-app.get('/login', function(req, res){
-	if(req.user != undefined){
-		res.redirect('/');
-	} else {
-	  res.render('login', {user: req.user });
-	}
+
+
+
+app.get("/", function(req, res){ 
+    if(req.isAuthenticated()){
+        res.redirect('loggedin')
+    }else{
+        res.redirect('notLoggedin')
+    }
+       
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['user_status', 'user_checkins']}));
-app.get('/auth/facebook/callback', 
-	passport.authenticate('facebook', {
-		failureRedirect: '/login'
-	}), function(req, res){
-		res.redirect('/');
-	}	
+app.get('/loggedin', authenticatedOrNot,  function(req, res){
+    res.render('loggedin', { user: req.user})
+})
+app.get('/notLoggedIn', function(req, res){
+    res.render('loggedin', {user: null});
+})
+
+app.get("/login", function(req, res){ 
+    res.render("auth/login");
+});
+
+app.post("/login" 
+    ,passport.authenticate('local',{
+        successRedirect : "/",
+        failureRedirect : "/login",
+    }) 
 );
+
+app.get("/signup", function (req, res) {
+    res.render("signup");
+});
+
+app.post("/signup", userExist, function (req, res, next) {
+    var user = new Users();
+    hash(req.body.password, function (err, salt, hash) {
+        if (err) throw err;
+        var user = new Users({
+            username: req.body.username,
+            salt: salt,
+            hash: hash,
+            _id : new ObjectID
+        }).save(function (err, newUser) {
+            if (err) throw err;
+            req.login(newUser, function(err) {
+              if (err) { return next(err); }
+              return res.redirect('/');
+            });
+        });
+    });
+});
+
+app.get("/auth/facebook", passport.authenticate("facebook",{ scope : "email"}));
+
+app.get("/auth/facebook/callback", 
+    passport.authenticate("facebook",{ failureRedirect: '/login'}),
+    function(req,res){
+        res.render("loggedin", {user : req.user});
+    }
+);
+
+app.get("/profile", authenticatedOrNot, function(req, res){ 
+    res.render("profile", { user : req.user});
+});
 
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.redirect('/login');
 });
 
-// ---------- Map Routes
-app.map = function(obj, route){
-	route = route || '';
-	for(var key in obj){
-		if(obj.hasOwnProperty(key)){
-			switch(typeof obj[key]){
-				case "object":
-					app.map(obj[key], route + key);
-					break;
-				case "function":
-					app[key](route, obj[key]);
-					break;
-			}
-		}
-	}
-}
-app.map({
-	'/username': {
-		get: function(req, res) {res.send("all usernames")},
-		'/:username':{
-			get: function(req, res, next) {
-				res.send(req.username + "'s profile");
-			}
-			
-		}
-	}
+http.createServer(app).listen(app.get('port'), function () {
+    console.log("Express server listening on port " + app.get('port'));
 });
-
-
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
-// Simple route middleware to ensure user is authenticated.
-//   Use this route middleware on any resource that needs to be protected.  If
-//   the request is authenticated (typically via a persistent login session),
-//   the request will proceed.  Otherwise, the user will be redirected to the
-//   login page.
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login')
-}
