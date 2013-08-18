@@ -174,8 +174,5 @@ block content
 
   .container 
       h1= title
-      p Welcome to #{user.id} 
-      p Display Name: #{user.displayName}
-      p UserName: #{user.languages}
-      p UserName: #{hello}
-      img(src="https://graph.facebook.com/#{user.id}/picture?type=normal")
+      p Welcome to #{user.fbId} 
+      img(src="https://graph.facebook.com/#{user.fbId}/picture?type=normal")

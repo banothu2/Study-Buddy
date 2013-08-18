@@ -47,11 +47,11 @@ html
                 p.navbar-text.pull-right
                   li.dropdown
                     a.dropdown-toggle(href='#', data-toggle='dropdown')
-                        | #{user.displayName}
+                        | #{user.name}
                         b.caret
                       ul.dropdown-menu
                         li 
-                          img.thumbnail(src="https://graph.facebook.com/#{user.id}/picture?width=200&height=100")
+                          img.thumbnail(src="https://graph.facebook.com/#{user.fbId}/picture?width=200&height=100")
                         li
                           a(href='#') Profile
                         li
