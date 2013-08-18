@@ -1,8 +1,28 @@
-form(id="signup", method="POST", action="/signup")
-	lable(for='username') User Name
-	input#username(type='text', name='username')
-	lable(for='password') Password
-	input#password(type='text', name='password')
-	input(type="submit", value="Sign Up")
+extends ../template/layout
 
-//- h1!=message
+block content
+    link(rel='stylesheet', href='/css/design/signin.css')
+
+    .container(style='padding-top: 60px;')
+        form.form-horizontal(id="signup", method="POST", action="/signup", role='form', style='max-width: 530px; padding: 15px; margin: 0 auto;')
+            .form-group
+                label.col-lg-2.control-label(for='username') Username
+                .col-lg-10
+                    input.form-control(type='text', id='username',  placeholder="Unique Username")
+            .form-group
+                label.col-lg-2.control-label(for='Name') Name
+                .row-fluid
+                    .col-lg-5
+                        input.form-control(type='text', id='Name', placeholder="First Name")
+                    .col-lg-5 
+                        input.form-control(type='text', id='Name',  placeholder="Last Name")
+            .form-group
+                label.col-lg-2.control-label(for='email') Email
+                .col-lg-10
+                    input.form-control(type='text', id='email',  placeholder="Email")
+            .form-group
+                label.col-lg-2.control-label(for='password') Password
+                .col-lg-10
+                    input.form-control(type='password', id='password', placeholder="..........")
+            .form-group
+                    button.btn.btn-block.btn-primary(type="submit") Register

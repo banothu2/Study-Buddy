@@ -1,12 +1,12 @@
-form(action='/login', method='post')
-    div
-        label Username:
-        input(type='text', name='username')
-      div
-        label Password:
-        input(type='password', name='password')
-      div
-        input(type='submit', value='Log In')
+extends ../template/layout
 
-a(href="/auth/facebook") Log In With Facebook
+block content
+    link(rel='stylesheet', href='/css/design/signin.css')
 
+    .container 
+        form.form-signin(action='/login', method='POST')
+            h2.form-signin-heading Please Sign in
+            input.form-control(type='text', name='username', placeholder='Email Address', autofocus)
+            input.form-control(type='password', name='password', placeholder='Password')
+            button.btn.btn-large.btn-primary.btn-block(type='submit') Sign In
+            button.btn.btn-large.btn-success.btn-block(type='button', href="/auth/facebook") Sign in with Facebook!

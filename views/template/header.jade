@@ -1,0 +1,38 @@
+.navbar.navbar-fixed-top.navbar-inverse
+  .container
+    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.nav-collapse')
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    a.navbar-brand(href='/hello') Study Buddy
+    .nav-collapse.collapse
+      ul.nav.navbar-nav
+        li.active
+          a(href='/hello') Home
+        li
+          a(href='#about') About
+        li
+          a(href='#contact') Mission
+      ul.nav.navbar-nav.pull-right
+        li
+          if(user == undefined)
+            button.btn.navbar-btn.btn-success#facebookLogin(type='button', href='/auth/facebook') Sign in with facebook
+          else 
+            p.navbar-text.pull-right
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown')
+                    | #{user.displayName}
+                    b.caret
+                  ul.dropdown-menu
+                    li 
+                      img.thumbnail(src="https://graph.facebook.com/#{user.fbId}/picture?width=200&height=100")
+                    li
+                      a(href='#') Profile
+                    li
+                      a(href='#') Settings
+                    li
+                      a(href='#') Messages
+                    li.divider
+                    //li.dropdown-header Account actions
+                    li
+                      a(href='/logout') Logout

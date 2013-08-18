@@ -29,11 +29,51 @@ var app = express();
 // ---------- Facebook Users Schema 
     var FacebookUserSchema = new mongoose.Schema({
         fbId: String,
+        username: String,
+        displayName: String,
+        firstName : String,
+        lastName: String,
+        gender: String,
+        profileURL: String,
         email: { type : String , lowercase : true},
-        name : String,
+        ageRange: String,
+        coverPhotoUrl: String,
+        courses: [CourseSchema],
+        graduationYear: Number,
+        phoneNumber: Number,
+        university: {        
+            university: String,
+            universityKey: String,
+            latitude: Number,
+            longitude: Number
+        }, 
+        geos: [GeoSchema]
     });
-    var FbUsers = mongoose.model('fbs', FacebookUserSchema);
+    var FbUsers = mongoose.model('fbUsers', FacebookUserSchema);
 
+// ---------- Course Schema
+    var CourseSchema = new mongoose.Schema({
+        courseCode: String,
+        courseTitle: String,
+        courseProfessor: String
+    });
+
+// ---------- Geolocation Schema
+    var GeoSchema = new mongoose.Schema({
+        address: String,
+        fbUserId: String,
+        date: Number,
+        startTime: String,
+        endTime: String,
+        latitude: String,
+        longitude: String,
+        notes: String, 
+        studyDate: String,
+        course: String,
+        university: String 
+    });
+
+    var Geos = mongoose.model('Geos', GeoSchema);
 // ---------- Configuration and Middlewares
 
     passport.use(new LocalStrategy(function(username, password,done){
@@ -59,15 +99,20 @@ var app = express();
           function(accessToken, refreshToken, profile, done) {
             FbUsers.findOne({fbId : profile.id}, function(err, oldUser){
                 if(oldUser){
-                    done(null, oldUser, profile);
+                    done(null, oldUser);
                 }else{
                     var newUser = new FbUsers({
                         fbId : profile.id ,
-                        email : profile.emails[0].value,
-                        name : profile.displayName
+                        username: profile.username,
+                        displayName: profile.displayName,
+                        firstName: profile.name.givenName,
+                        lastName: profile.name.familyName,
+                        gender: profile.gender,
+                        profileURL: profile.profileURL,
+                        email : profile.emails[0].value
                     }).save(function(err,newUser){
                         if(err) throw err;
-                        done(null, newUser, profile);
+                        done(null, newUser);
                     });
                 }
             }); 
@@ -83,15 +128,16 @@ var app = express();
         FbUsers.findById(id,function(err,user){
             if(err) done(err);
             if(user){
-                done(null,user);
+                done(null, user);
             }else{
                 Users.findById(id, function(err,user){
                     if(err) done(err);
-                    done(null,user);
+                    done(null, user);
                 });
             }
         });
     });
+    
 // ---------- App Configuration
     app.configure(function () {
         app.set('port', process.env.PORT || 3000);
