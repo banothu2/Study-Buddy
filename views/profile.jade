@@ -1,0 +1,16 @@
+extends template/layout
+
+block content 
+  script(type='text/javascript', src='/lib/angular/angular.js')
+  script(type='text/javascript', src='/angularJS/controllers.js')
+  style.
+  .container(ng-controller="UserProfile")
+    p {{user}}
+    .col-lg-12
+        .col-lg-3
+            img.thumbnail(src="{{prependPic}}{{user.fbId}}{{appendPic}}")
+        .col-lg-9
+            p {{user.displayName}}
+            p {{user.email}}
+            p {{user.university.university}}
+            p(ng-repeat="course in user.courses") {{course}}

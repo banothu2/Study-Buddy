@@ -62,7 +62,7 @@ var app = express();
     var GeoSchema = new mongoose.Schema({
         address: String,
         fbUserId: String,
-        date: Number,
+        date: String,
         startTime: String,
         endTime: String,
         latitude: String,
@@ -73,7 +73,8 @@ var app = express();
         university: String 
     });
 
-    var Geos = mongoose.model('Geos', GeoSchema);
+    var Geos = mongoose.model('geos', GeoSchema);
+
 // ---------- Configuration and Middlewares
 
     passport.use(new LocalStrategy(function(username, password,done){
@@ -211,7 +212,8 @@ var app = express();
 
 // ---------- Routes - Get Requests
 app.get("/", authenticated, function(req, res){ 
-    res.render('index', {user: req.user})
+    res.redirect('/user/'+ req.user.university.universityKey+'/' + req.user.username)
+    //res.render('index', {user: req.user})
 });
 
 app.get("/login", function(req, res){
@@ -235,6 +237,61 @@ app.get("/auth/facebook/callback",
         res.redirect("/");
     }
 );
+
+
+app.get('/user/:university/:userName', authenticated, function(req, res){
+    var university = req.params.university;
+    var userName = req.params.userName;
+    if(req.user.university.universityKey != university){
+        res.redirect('/')
+    } else {
+        res.render('index', {user: req.user})
+    }
+});
+
+app.get('/user/:university/:username/JSON', function(req, res){
+    var university = req.params.university;
+    var username = req.params.userId;
+
+    Geos.find({} ,function(err, item){
+        res.contentType('json');
+        res.send({
+            data: JSON.stringify(item)
+        })
+    })
+})
+app.get('/profile/:username/JSON', function(req, res){
+    var username = req.params.username;
+    FbUsers.findOne({username: username}, function(err, item){
+        res.contentType('json');
+        res.send({
+            data: JSON.stringify(item)
+        })
+    })
+})
+app.get('/profile/:username', authenticated, function(req, res){
+    var username = req.params.username;
+    if(req.user.username != username){
+        res.redirect('/')
+    } else {
+        res.render('profile', {user: req.user})
+    }
+})
+
+// {
+//     "_id": ObjectID("52111a18e8a7620000000001"),
+//     "address": "UIUC Engineering Hall",
+//     "fbUserId": "1011580629",
+//     "date": "1376852328646",
+//     "startTime": "17:30",
+//     "endTime": "21:30",
+//     "latitude": "40.1108333",
+//     "longitude": "-88.22694439999998",
+//     "notes": "3rd floor, room 212",
+//     "studyDate": "2013-08-18",
+//     "course": "PHYS 212",
+//     "university": "UIUC"
+// }
 
 // ---------- Routes - Post Requests 
 
