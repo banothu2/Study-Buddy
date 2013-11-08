@@ -5,8 +5,10 @@ block content
   script(type='text/javascript', src='/javascripts/gmaps.js')
   script(type='text/javascript', src='http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js')
   script(type='text/javascript', src='/lib/angular/angular.js')
-  script(type='text/javascript', src='/angularJS/controllers.js')
+  script(type='text/javascript', src='/controllers/main.js')
   script(type='text/javascript', src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+  script(type='text/javascript', src='/directives/google-maps.js')
+  script(type='text/javascript', src='/controllers/gmap.js')
   script.
       window.onload = function(){
         var pathArray = window.location.pathname.split('/'); // splits the path array
@@ -22,13 +24,14 @@ block content
               map.addMarker({
                 lat: parsed[i].latitude,
                 lng: parsed[i].longitude,
+
                 infoWindow: {
-                  content: '<table> <tbody> <tr> <td>' + 
+                  content: '<div style="width: 150px"> <table> <tbody> <tr> <td>' + 
                            '<p><b>' + parsed[i].name + '</b></p>' + 
                            '<p> Studying: <b>' + parsed[i].course + '</b></p>' + 
                            '<p> From <b>' + parsed[i].startTime + ' to ' + parsed[i].endTime + '</b></p>' + 
                            '<p>' + parsed[i].notes + '</p>' + 
-                           '</td> </tr> </tbody> </table>'
+                           '</td> </tr> </tbody> </table></div>'
 
                 }
               });
@@ -235,12 +238,12 @@ block content
                   thead 
                     tr 
                       th 
-                      td Name 
-                      td Course 
-                      td Address 
-                      td Date 
-                      td Time 
-                      td Notes
+                      th Name 
+                      th Course 
+                      th Address 
+                      th Date 
+                      th Time 
+                      th Notes
                   tbody 
                     tr(ng-repeat='geo in geos | filter: search') 
                       td 
@@ -260,45 +263,47 @@ block content
             button.close(type='button', data-dismiss='modal', aria-hidden='true')
             h4.modal-title Add Study Location
           .modal-body
-            form.form-horizontal(id="addGeo", method="POST", action="/addGeo", role='form', style='max-width: 530px; padding: 15px; margin: 0 auto;')
+            form.form-horizontal(id="addGeo", method="POST", action="/data/addGeo", role='form', style='max-width: 530px; padding: 15px; margin: 0 auto;')
               .form-group
-                  label.col-lg-2.control-label(for='inputDate') Location
+                  label.col-lg-2.control-label(for='inputLocation') Location
                   .col-lg-10
-                      input.form-control(type='text', id='inputLocation', disabled)
+                      input.form-control(type='text', id='inputLocation', name='inputLocation', readonly)
               .form-group
-                  label.col-lg-2.control-label(for='inputDate') Latitude
+                  label.col-lg-2.control-label(for='inputLatitude') Latitude
                   .col-lg-4
-                    input.form-control(type='text', id='inputLatitude', disabled)
-                  label.col-lg-2.control-label(for='inputDate') Longitude
+                    input.form-control(type='text', id='inputLatitude', name='inputLatitude', readonly)
+                  label.col-lg-2.control-label(for='inputLongitude') Longitude
                   .col-lg-4
-                    input.form-control(type='text', id='inputLongitude', disabled)
+                    input.form-control(type='text', id='inputLongitude', name='inputLongitude', readonly)
               .form-group
                   label.col-lg-2.control-label(for='inputDate') Date
                   .col-lg-10
-                      input.form-control(type='date', id='inputDate')
+                      input.form-control(type='date', id='inputDate', name='inputDate')
               .form-group
                   label.col-lg-2.control-label(for='inputStartTime') StartTime
                   .col-lg-10
-                      input.form-control(type='time', id='inputStartTime')
+                      input.form-control(type='time', id='inputStartTime', name='inputStartTime')
               .form-group
                   label.col-lg-2.control-label(for='inputEndTime') EndTime
                   .col-lg-10
-                      input.form-control(type='time', id='inputEndTime')
+                      input.form-control(type='time', id='inputEndTime', name='inputEndTime')
               .form-group
-                  label.col-lg-2.control-label(for='inputNote') Notes
+                  label.col-lg-2.control-label(for='inputNotes') Notes
                   .col-lg-10
-                      textarea.form-control(type='text', id='email',  placeholder="Enter any notes in here")
+                      textarea.form-control(type='text', id='inputNotes', name='inputNotes',  placeholder="Enter any notes in here")
               .form-group
                   label.col-lg-2.control-label(for='inputCourse') Course
                   .col-lg-10
-                      select.form-control(id='inputCourse')
+                      select.form-control(id='inputCourse', name='inputCourse')
                         option CS 125
                         option CS 173
                         option PHYS 212
                         option MATH 241
-                        option CHEM 102                    
+                        option CHEM 102   
+              button.btn.btn-primary(type="submit", id='test') Add Study Info!
+
           .modal-footer
             button.btn.btn-default(type='button', data-dismiss='modal') Close
-            button.btn.btn-primary(type="button", id='test') Add Study Info!
+            button.btn.btn-primary(type="submit", id='test') Add Study Info!
 
 

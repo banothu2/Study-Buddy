@@ -60,6 +60,7 @@ var app = express();
 
 // ---------- Geolocation Schema
     var GeoSchema = new mongoose.Schema({
+        name: String,
         address: String,
         fbUserId: String,
         date: String,
@@ -155,12 +156,14 @@ var app = express();
         app.use(flash());
         app.use(app.router);
         app.use(express.static(path.join(__dirname, 'public')));
+
     });
 
     app.configure('development', function () {
         app.use(express.errorHandler());
     });
 
+    app.engine('html', require('ejs').renderFile);
 // ---------- Error Handling
     app.use(function(req, res, next){
       res.status(404);
@@ -209,6 +212,10 @@ var app = express();
         });
     }
 
+// ---------- Routes Test
+app.get("/test/map", function(req, res){
+    res.render('test/beta.html');
+})
 
 // ---------- Routes - Get Requests
 app.get("/", authenticated, function(req, res){ 
@@ -320,6 +327,36 @@ app.post("/signup", userExist, function (req, res, next) {
         });
     });
 });
+
+app.post("/data/addGeo", userExist, function(req, res, next){
+    var body = req.body;
+    //res.json(req.user.fbId);
+    var d = new Date();
+    var date = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+    //res.json(date);
+    new Geos({
+        name: req.user.displayName,
+        address: body.inputLocation,
+        fbUserId: req.user.fbId,
+        date: date,
+        startTime: body.inputStartTime,
+        endTime: body.inputEndTime,
+        latitude: body.inputLatitude,
+        longitude: body.inputLongitude,
+        notes: body.inputNotes, 
+        studyDate: body.inputDate,
+        course: body.inputCourse,
+        university: req.user.university.universityKey 
+    }).save(function(err, docs){
+        if(err) res.json(err);
+        return res.redirect('/');
+    }); 
+ 
+})
+
+
+
+
 
 // ---------- Initialize server
 http.createServer(app).listen(app.get('port'), function () {

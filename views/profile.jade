@@ -1,16 +1,100 @@
 extends template/layout
 
-block content 
+block content
+  script(type='text/javascript', src='http://maps.google.com/maps/api/js?sensor=true')
+  script(type='text/javascript', src='/javascripts/gmaps.js')
+  script(type='text/javascript', src='http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js')
   script(type='text/javascript', src='/lib/angular/angular.js')
-  script(type='text/javascript', src='/angularJS/controllers.js')
+  script(type='text/javascript', src='/controllers/main.js')
+  script(type='text/javascript', src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+  script(type='text/javascript', src='/directives/google-maps.js')
+  script(type='text/javascript', src='/controllers/gmap.js')
+  style(type="text/css", media="screen")
   style.
-  .container(ng-controller="UserProfile")
-    p {{user}}
+    .wrap { margin: -10px auto; background:url(/images/uiuc.jpg) no-repeat; width: 100%; height: 250px; padding: 20px;  position: relative; }
+    .note { position: absolute; top: 25px; left: 120px; }
+  .wrap(ng-controller="UserProfile")
+      .note
+          img.img-thumbnail(src="{{prependPic}}{{user.fbId}}{{appendPic}}")
+
+  .container(ng-controller="UserProfile", style='margin-top:0px')
     .col-lg-12
-        .col-lg-3
-            img.thumbnail(src="{{prependPic}}{{user.fbId}}{{appendPic}}")
+        .well.col-lg-3(style='margin-top: 50px')
+          table.table.table-hover
+            thead 
+              tr 
+                th Courses
+            tbody
+              tr(ng-repeat="course in user.courses") 
+                td {{course}}
+          .row
+            .span3
+                .page-header
+                  p.pull-right
+                    a(href='#') see all
+                  h4(style='margin-left:10px') Honors 
+                    small (10)
+                div
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-circle(src='http://placehold.it/60x60')
+          .row
+            .span3
+                .page-header
+                  h4(style='margin-left:10px') Friends on Study Buddy 
+                    small (10)
+                div
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
+                  a(href='#')
+                    img.img-thumbnail(src='http://placehold.it/60x60')
         .col-lg-9
-            p {{user.displayName}}
-            p {{user.email}}
-            p {{user.university.university}}
-            p(ng-repeat="course in user.courses") {{course}}
+            .page-header
+              h2 {{user.displayName}}
+            .col-lg-6
+              p University: {{user.university.university}}
+            .col-lg-6
+              p Member Since: {{dateJoined}}
+            .col-lg-12
+              div(ng-controller="ExampleController")
+                .google-map(center='position.coords', zoom='zoomProperty', markers='markersProperty', latitude='clickedLatitudeProperty', longitude='clickedLongitudeProperty', mark-click='true', draggable='true', fit='false', events='eventsProperty', style='height: 200px; width: 100%;')
+
+            .col-lg-12
+              p Total Geo Submissions: {{geos.length}}
+              table.table.table-hover
+                thead 
+                  tr 
+                    th Course 
+                    th Address 
+                    th Date 
+                    th Time 
+                    th Notes
+                tbody 
+                  tr(ng-repeat='geo in user.geos') 
+                    td {{geo.course}}
+                    td {{geo.address}}
+                    td {{geo.studyDate}}
+                    td {{geo.startTime}} to {{geo.endTime}}
+                    td {{geo.notes}}    
+
