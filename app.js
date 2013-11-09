@@ -276,8 +276,19 @@ app.get('/profile/:username/JSON', function(req, res){
         })
     })
 })
+app.get('/profile/:username/geos/JSON', function(req, res){
+    var fbId = req.user.fbId;
+    console.log(fbId);
+    Geos.find({fbUserId: fbId}, function(err, item){
+        res.contentType('json');
+        res.send({
+            data: JSON.stringify(item)
+        })
+    })
+})
 app.get('/profile/:username', authenticated, function(req, res){
     var username = req.params.username;
+    var fbId = req.user.fbId;
     if(req.user.username != username){
         res.redirect('/')
     } else {
@@ -334,6 +345,31 @@ app.post("/data/addGeo", userExist, function(req, res, next){
     var d = new Date();
     var date = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
     //res.json(date);
+    var fbId = req.user.fbId;
+
+/*    FbUsers.findOne({fbId: fbId}, function(err, item){
+        item.geos.addToSet({
+            name: req.user.displayName,
+            address: body.inputLocation,
+            fbUserId: req.user.fbId,
+            date: date,
+            startTime: body.inputStartTime,
+            endTime: body.inputEndTime,
+            latitude: body.inputLatitude,
+            longitude: body.inputLongitude,
+            notes: body.inputNotes, 
+            studyDate: body.inputDate,
+            course: body.inputCourse,
+            university: req.user.university.universityKey 
+        });
+        item.save(function(err){
+            if(err) console.log(err);
+            return res.redirect('/');
+        })
+
+    })
+*/
+    
     new Geos({
         name: req.user.displayName,
         address: body.inputLocation,
@@ -351,6 +387,7 @@ app.post("/data/addGeo", userExist, function(req, res, next){
         if(err) res.json(err);
         return res.redirect('/');
     }); 
+    
  
 })
 

@@ -24,14 +24,14 @@ block content
               map.addMarker({
                 lat: parsed[i].latitude,
                 lng: parsed[i].longitude,
-
                 infoWindow: {
-                  content: '<div style="width: 150px"> <table> <tbody> <tr> <td>' + 
+                  content: '<div style="width: 250px"><table><tr><th><div style="width: 100px; margin-right: 3px;"><img src="https://graph.facebook.com/' + parsed[i].fbUserId + '/picture?width=100&height=100" class="thumbnail"></div></th>' + 
+                           '<th><div style="width: 147px"><table> <tbody> <tr> <td>' + 
                            '<p><b>' + parsed[i].name + '</b></p>' + 
                            '<p> Studying: <b>' + parsed[i].course + '</b></p>' + 
                            '<p> From <b>' + parsed[i].startTime + ' to ' + parsed[i].endTime + '</b></p>' + 
                            '<p>' + parsed[i].notes + '</p>' + 
-                           '</td> </tr> </tbody> </table></div>'
+                           '</td> </tr> </tbody> </table></div></th></tr></div>'
 
                 }
               });

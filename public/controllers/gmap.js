@@ -83,5 +83,8 @@ function UserProfile($scope, $http){
 		    $scope.coverUrl = response["cover"].source;
 		});
 		$scope.appendCover = "?fields=cover"
+	});
+	$http.get('/profile/' + pathArray[2] + '/geos/JSON').success(function(data){
+		$scope.geos = $.parseJSON(data.data);
 	})
 }
