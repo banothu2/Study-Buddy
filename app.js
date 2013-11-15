@@ -164,6 +164,7 @@ var app = express();
     });
 
     app.engine('html', require('ejs').renderFile);
+
 // ---------- Error Handling
     app.use(function(req, res, next){
       res.status(404);
@@ -185,8 +186,10 @@ var app = express();
 
 // ---------- Helpers
     function authenticated(req, res, next){
-        if(req.isAuthenticated()){
+        if(req.isAuthenticated() && req.user.courses[0] != null){
             return next();
+        }else if(req.isAuthenticated() && req.user.courses[0] == null) {
+            res.redirect("/register")
         }else{
             res.redirect("/login");
         }
@@ -213,142 +216,168 @@ var app = express();
     }
 
 // ---------- Routes Test
-app.get("/test/map", function(req, res){
-    res.render('test/beta.html');
-})
+    app.get("/test/map", function(req, res){
+        res.render('test/beta.html');
+    })
 
 // ---------- Routes - Get Requests
-app.get("/", authenticated, function(req, res){ 
-    res.redirect('/user/'+ req.user.university.universityKey+'/' + req.user.username)
-    //res.render('index', {user: req.user})
-});
+    app.get("/", authenticated, function(req, res){ 
+        res.redirect('/user/'+ req.user.university.universityKey+'/' + req.user.username)
+        //res.render('index', {user: req.user})
+    });
 
-app.get("/login", function(req, res){
-    res.render('auth/login');
-});
+    app.get("/login", function(req, res){
+        res.render('auth/login');
+    });
 
-app.get("/signup", notAuthenticated, function(req, res){
-    res.render("auth/signup");
-});
+    app.get("/signup", notAuthenticated, function(req, res){
+        res.render("auth/signup");
+    });
 
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/login');
-});
+    app.get('/logout', function(req, res){
+      req.logout();
+      res.redirect('/login');
+    });
 
-app.get("/auth/facebook", passport.authenticate("facebook", { scope : "email" }));
+    app.get("/auth/facebook", passport.authenticate("facebook", { scope : "email" }));
 
-app.get("/auth/facebook/callback", 
-    passport.authenticate("facebook",{ failureRedirect: '/login'}),
-    function(req,res){
-        res.redirect("/");
-    }
-);
+    app.get("/auth/facebook/callback", 
+        passport.authenticate("facebook",{ failureRedirect: '/login'}),
+        function(req,res){
+            res.redirect("/");
+        }
+    );
 
+    app.get('/register', function(req, res){
+        res.render('auth/register');
+    })
 
-app.get('/user/:university/:userName', authenticated, function(req, res){
-    var university = req.params.university;
-    var userName = req.params.userName;
-    if(req.user.university.universityKey != university){
-        res.redirect('/')
-    } else {
-        res.render('index', {user: req.user})
-    }
-});
+    app.get('/user/:university/:userName', authenticated, function(req, res){
+        var university = req.params.university;
+        var userName = req.params.userName;
+        if(req.user.university.universityKey != university){
+            res.redirect('/')
+        } else {
+            res.render('index', {user: req.user})
+        }
+    });
 
-app.get('/user/:university/:username/JSON', function(req, res){
-    var university = req.params.university;
-    var username = req.params.userId;
+    app.get('/user/:university/:username/JSON', function(req, res){
+        var university = req.params.university;
+        var username = req.params.userId;
 
-    Geos.find({} ,function(err, item){
-        res.contentType('json');
-        res.send({
-            data: JSON.stringify(item)
+        Geos.find({} ,function(err, item){
+            res.contentType('json');
+            res.send({
+                data: JSON.stringify(item)
+            })
         })
     })
-})
-app.get('/profile/:username/JSON', function(req, res){
-    var username = req.params.username;
-    FbUsers.findOne({username: username}, function(err, item){
-        res.contentType('json');
-        res.send({
-            data: JSON.stringify(item)
-        })
-    })
-})
-app.get('/profile/:username/geos/JSON', function(req, res){
-    var fbId = req.user.fbId;
-    console.log(fbId);
-    Geos.find({fbUserId: fbId}, function(err, item){
-        res.contentType('json');
-        res.send({
-            data: JSON.stringify(item)
-        })
-    })
-})
-app.get('/profile/:username', authenticated, function(req, res){
-    var username = req.params.username;
-    var fbId = req.user.fbId;
-    if(req.user.username != username){
-        res.redirect('/')
-    } else {
-        res.render('profile', {user: req.user})
-    }
-})
 
-// {
-//     "_id": ObjectID("52111a18e8a7620000000001"),
-//     "address": "UIUC Engineering Hall",
-//     "fbUserId": "1011580629",
-//     "date": "1376852328646",
-//     "startTime": "17:30",
-//     "endTime": "21:30",
-//     "latitude": "40.1108333",
-//     "longitude": "-88.22694439999998",
-//     "notes": "3rd floor, room 212",
-//     "studyDate": "2013-08-18",
-//     "course": "PHYS 212",
-//     "university": "UIUC"
-// }
+    app.get('/user/:university/:username/maps/JSON', function(req, res){
+        var university = req.params.university;
+        var username = req.params.userId;
+        var d = new Date();
+        var date = d.getFullYear() + "-" + (d.getMonth()+1) + "-0" + d.getDate();
+
+        Geos.find({studyDate: date} ,function(err, item){
+            res.contentType('json');
+            res.send({
+                data: JSON.stringify(item)
+            })
+        })
+    })
+    
+
+    app.get('/profile/:username/JSON', function(req, res){
+        var username = req.params.username;
+        FbUsers.findOne({username: username}, function(err, item){
+            res.contentType('json');
+            res.send({
+                data: JSON.stringify(item)
+            })
+        })
+    })
+    app.get('/profile/:username/geos/JSON', function(req, res){
+        var fbId = req.user.fbId;
+        console.log(fbId);
+        Geos.find({fbUserId: fbId}, function(err, item){
+            res.contentType('json');
+            res.send({
+                data: JSON.stringify(item)
+            })
+        })
+    })
+    app.get('/profile/:username', authenticated, function(req, res){
+        var username = req.params.username;
+        var fbId = req.user.fbId;
+        if(req.user.username != username){
+            res.redirect('/')
+        } else {
+            res.render('profile', {user: req.user})
+
+        }
+    })
 
 // ---------- Routes - Post Requests 
 
-app.post("/login" 
-    ,passport.authenticate('local',{
-        successRedirect : "/",
-        failureRedirect : "/login",
-    }) 
-);
+    app.post("/login" 
+        ,passport.authenticate('local',{
+            successRedirect : "/",
+            failureRedirect : "/login",
+        }) 
+    );
 
-app.post("/signup", userExist, function (req, res, next) {
-    var user = new Users();
-    hash(req.body.password, function (err, salt, hash) {
-        if (err) throw err;
-        var user = new Users({
-            username: req.body.username,
-            salt: salt,
-            hash: hash,
-            _id : new ObjectID
-        }).save(function (err, newUser) {
+    app.post("/signup", userExist, function (req, res, next) {
+        var user = new Users();
+        hash(req.body.password, function (err, salt, hash) {
             if (err) throw err;
-            req.login(newUser, function(err) {
-              if (err) { return next(err); }
-              return res.redirect('/');
+            var user = new Users({
+                username: req.body.username,
+                salt: salt,
+                hash: hash,
+                _id : new ObjectID
+            }).save(function (err, newUser) {
+                if (err) throw err;
+                req.login(newUser, function(err) {
+                  if (err) { return next(err); }
+                  return res.redirect('/');
+                });
             });
         });
     });
-});
 
-app.post("/data/addGeo", userExist, function(req, res, next){
-    var body = req.body;
-    //res.json(req.user.fbId);
-    var d = new Date();
-    var date = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
-    //res.json(date);
-    var fbId = req.user.fbId;
+    app.post("/data/addGeo", userExist, function(req, res, next){
+        var body = req.body;
+        //res.json(req.user.fbId);
+        var d = new Date();
+        var date = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+        //res.json(date);
+        var fbId = req.user.fbId;
 
-/*    FbUsers.findOne({fbId: fbId}, function(err, item){
-        item.geos.addToSet({
+    /*    FbUsers.findOne({fbId: fbId}, function(err, item){
+            item.geos.addToSet({
+                name: req.user.displayName,
+                address: body.inputLocation,
+                fbUserId: req.user.fbId,
+                date: date,
+                startTime: body.inputStartTime,
+                endTime: body.inputEndTime,
+                latitude: body.inputLatitude,
+                longitude: body.inputLongitude,
+                notes: body.inputNotes, 
+                studyDate: body.inputDate,
+                course: body.inputCourse,
+                university: req.user.university.universityKey 
+            });
+            item.save(function(err){
+                if(err) console.log(err);
+                return res.redirect('/');
+            })
+
+        })
+    */
+        new Geos({
             name: req.user.displayName,
             address: body.inputLocation,
             fbUserId: req.user.fbId,
@@ -361,38 +390,13 @@ app.post("/data/addGeo", userExist, function(req, res, next){
             studyDate: body.inputDate,
             course: body.inputCourse,
             university: req.user.university.universityKey 
-        });
-        item.save(function(err){
-            if(err) console.log(err);
+        }).save(function(err, docs){
+            if(err) res.json(err);
             return res.redirect('/');
-        })
-
+        }); 
+        
+     
     })
-*/
-    
-    new Geos({
-        name: req.user.displayName,
-        address: body.inputLocation,
-        fbUserId: req.user.fbId,
-        date: date,
-        startTime: body.inputStartTime,
-        endTime: body.inputEndTime,
-        latitude: body.inputLatitude,
-        longitude: body.inputLongitude,
-        notes: body.inputNotes, 
-        studyDate: body.inputDate,
-        course: body.inputCourse,
-        university: req.user.university.universityKey 
-    }).save(function(err, docs){
-        if(err) res.json(err);
-        return res.redirect('/');
-    }); 
-    
- 
-})
-
-
-
 
 
 // ---------- Initialize server

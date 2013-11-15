@@ -14,7 +14,7 @@ block content
         var pathArray = window.location.pathname.split('/'); // splits the path array
 
         $.ajax({
-          url: '/user/' + '#{user.university.universityKey}' + '/' + '#{user.fbId}'+ '/JSON',
+          url: '/user/' + '#{user.university.universityKey}' + '/' + '#{user.fbId}'+ '/maps/JSON',
           success: function(data, textStatus, jqXHR){
             var res = jqXHR.responseText;
             var parsed = $.parseJSON($.parseJSON(res).data);
